@@ -25,6 +25,7 @@ The third argument is the number of times that the message needs to be sent.<br>
 python3 hw.py "Subash Mylraj" "spam test!" 5
 ```
 
+![Example](example.gif)
 
 Use the following command to get more help.
 ```
