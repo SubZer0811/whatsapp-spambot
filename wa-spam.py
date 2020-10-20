@@ -38,7 +38,7 @@ chat_search = browser.find_by_xpath("/html/body/div[1]/div/div/div[3]/div/div[1]
 chat_search.type(args.chat_name)
 
 # press the chat
-browser.find_by_xpath('//*[@title="'+args.chat_name+'"]').click()
+browser.find_by_xpath('//*[contains(@title, "'+args.chat_name+'")]').click()
 
 # send message
 for i in range(args.count):
