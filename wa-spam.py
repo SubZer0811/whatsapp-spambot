@@ -4,14 +4,20 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Spam your friends or enemies on whatsapp!")
 parser.add_argument('chat_name', type=str, help="Name of the chat you want to spam")
-parser.add_argument('msg', type=str, help="Message to be sent")
+parser.add_argument('--msg', type=str, help="Message to be sent")
 parser.add_argument('count', type=int, help="Number of messages to be sent")
 parser.add_argument('-n', action='store_true', help="Explicitly set the network proxy type to: no proxy")
 parser.add_argument('--waittime', type=int, default=10, help="Change the time that the application waits for you to login. Default: 10 seconds")
+parser.add_argument('--file', type=str, help="Send text from a file")
 
 args = parser.parse_args()
 
-input("Press enter when you are ready with the whatsapp scanner on your phone!\nYou will have 10 secs to scan the QR code.\n")
+if(file == None or msg == None):
+	print("Please enter either a message or file with the message")
+	exit(0)
+
+print("You will have 10 secs to scan the QR code.")
+input("Press enter when you are ready with the whatsapp scanner on your phone!")
 
 browser = Browser()
 
@@ -40,13 +46,16 @@ chat_search.type(args.chat_name)
 # press the chat
 browser.find_by_xpath('//*[contains(@title, "'+args.chat_name+'")]').click()
 
-# send message
-for i in range(args.count):
-	chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
-	chatbox.type(args.msg)
+confirmation = input("is this the chat you want to send the messages to?\nEnter yes or no:")
+if(confirmation == 'yes'):
 
-	send_button = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[3]/button").first.click()
+	# send message
 
+	for i in range(args.count):
+		chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
+		chatbox.type(args.msg)
+
+		send_button = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[3]/button").first.click()
 
 #logout from whatsapp
 browser.find_by_xpath("/html/body/div[1]/div/div/div[3]/div/header/div[2]/div/span/div[3]/div").first.click()
