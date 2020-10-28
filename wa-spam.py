@@ -1,6 +1,7 @@
 from splinter import Browser
 from time import sleep
 import argparse
+from selenium.webdriver.common.keys import Keys
 
 parser = argparse.ArgumentParser(description="Spam your friends or enemies on whatsapp!")
 parser.add_argument('chat_name', type=str, help="Name of the chat you want to spam")
@@ -12,7 +13,7 @@ parser.add_argument('--file', type=str, help="Send text from a file")
 
 args = parser.parse_args()
 
-if(file == None or msg == None):
+if(args.file == None and args.msg == None):
 	print("Please enter either a message or file with the message")
 	exit(0)
 
@@ -50,17 +51,34 @@ confirmation = input("is this the chat you want to send the messages to?\nEnter 
 if(confirmation == 'yes'):
 
 	# send message
+	if(args.file != None):
+		f = open(args.file, "r")
+		line = f.readline()
 
-	for i in range(args.count):
-		chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
-		chatbox.type(msg)
-	for i in range(args.count):
-		chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
-		chatbox.type(args.msg)
+		active_web_element = browser.driver.switch_to_active_element()
+		for i in range(args.count):
+			f = open(args.file, "r")
+			line = f.readline()
+			while line:
+				chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
+				line = line.strip('\n')
+				chatbox.type(line)
+				active_web_element.send_keys(Keys.CONTROL + Keys.ENTER)
+				line = f.readline()
+			send_button = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[3]/button").first.click()
+			f.seek(0, 0)
 
-		send_button = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[3]/button").first.click()
+		f.close()
 
-logout from whatsapp
+	else:
+		msg = args.msg
+		for i in range(args.count):
+			chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
+			chatbox.type(msg)
+			send_button = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[3]/button").first.click()
+
+
+#logout from whatsapp
 browser.find_by_xpath("/html/body/div[1]/div/div/div[3]/div/header/div[2]/div/span/div[3]/div").first.click()
 browser.find_by_xpath("/html/body/div[1]/div/div/div[3]/div/header/div[2]/div/span/div[3]/span/div/ul/li[7]/div").first.click()
 
