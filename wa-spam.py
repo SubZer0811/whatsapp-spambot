@@ -12,7 +12,7 @@ parser.add_argument('--file', type=str, help="Send text from a file")
 
 args = parser.parse_args()
 
-if(file == None or msg == None):
+if(file == None and msg == None):
 	print("Please enter either a message or file with the message")
 	exit(0)
 
@@ -50,10 +50,15 @@ confirmation = input("is this the chat you want to send the messages to?\nEnter 
 if(confirmation == 'yes'):
 
 	# send message
+	if(file != None):
+		f = open(file, "r")
+		msg = f.readlines(-1)
+	else:
+		msg = args.msg
 
 	for i in range(args.count):
 		chatbox = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]").first
-		chatbox.type(args.msg)
+		chatbox.type(msg)
 
 		send_button = browser.find_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[3]/button").first.click()
 
