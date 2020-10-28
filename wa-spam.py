@@ -12,7 +12,7 @@ parser.add_argument('--file', type=str, help="Send text from a file")
 
 args = parser.parse_args()
 
-if(args.file == None and args.msg == None):
+if(file == None and msg == None):
 	print("Please enter either a message or file with the message")
 	exit(0)
 
@@ -50,12 +50,9 @@ input("Press enter when you are ready with the whatsapp scanner on your phone!")
 if(confirmation == 'yes'):
 
 	# send message
-	if(args.file != None):
-		f = open(args.file, "r")
-		txt = f.readlines(-1)
-		msg = ''
-		[x.join(msg) for x in txt]
-		print(msg)
+	if(file != None):
+		f = open(file, "r")
+		msg = f.readlines(-1)
 	else:
 		msg = args.msg
 
